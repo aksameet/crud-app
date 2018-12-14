@@ -65,7 +65,7 @@ class Modal extends Component {
                     placeholder="Recipe name"
                 />
                 <Field
-                    label="Post Content"
+                    label="Ingredients"
                     name="recipe_ingredients"
                     component={this.renderIngredientsField}
                     rows="8" 

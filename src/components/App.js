@@ -1,7 +1,8 @@
 import '../style/App.css';
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { addRecipe } from "../actions/index";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { addRecipe } from '../actions/index';
+import Modal from './Modal';
 
 class App extends Component {
     constructor(props) {
@@ -25,17 +26,17 @@ class App extends Component {
     }
     
     renderList() {
-        console.log(this.props.recipes);
 
         if (this.props.recipes) {
             return this.props.recipes.map(recipe => {
+                const { recipe_name, recipe_ingredients } = recipe;
                 return (
                     <li
-                        key={recipe}
+                        key={recipe_name}
                         // onClick={() => this.props.addRecipe(recipe)}
                         className="recipes--list_item"
                     >
-                        {recipe}
+                        {recipe_ingredients}
                     </li>
                 );
             });
@@ -65,6 +66,7 @@ class App extends Component {
                             <button type="submit" className="recipes--list__button">Add Recipe</button>
                         </span>
                     </form>
+                    <Modal />
                 </div>
             </div>
         );

@@ -8,6 +8,7 @@
     "react-redux": "^6.0.0",
     "react-scripts": "2.1.1",
     "redux": "^4.0.1",
+    "redux-form": "^8.0.4",
     "redux-promise": "^0.6.0"
   },
   "scripts": {

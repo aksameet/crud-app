@@ -1,0 +1,29 @@
+.Modal {
+    position: absolute;
+    top: -100%;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .2);
+    display: flex;
+    transition: all .4s ease-in-out;
+    &.active {
+        top: 0;
+    }
+    &--form {
+        display: block;
+        margin: auto;
+        width: 70%;
+        height: 50%;
+        background-color: #fff;
+        &_submit {
+            padding: 5px;
+            background-color: darkblue;
+            color: white;
+        }
+        &_close {
+            padding: 5px;
+            background-color: darkgrey;
+            color: black;
+        }
+    }
+}

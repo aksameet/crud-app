@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { addRecipe } from '../actions/index';
 
 class Modal extends Component {
-    
+
     renderNameField(field) {
         const {label, input, placeholder, meta: { touched, error } } = field;
         const className = `${touched && error ? "has-danger" : ""}`;
@@ -27,7 +27,7 @@ class Modal extends Component {
     renderIngredientsField(field) {
 
         const { label, input, rows, placeholder, meta : {touched, error} } = field;
-        const textareaStyles = `${touched && error ? "widget-display__content-new__alert" : ""}`;
+        const textareaStyles = `${touched && error ? "customClass" : ""}`;
 
         return (
             <div>
@@ -53,26 +53,41 @@ class Modal extends Component {
     }
 
     render() {
-        const { handleSubmit } = this.props;
+        const { handleSubmit, show, handleClose } = this.props;
+        let modalClass = `Modal ${show ? 'active': null}`
 
         return (
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <label>Add a Recipe</label>
-                <Field
-                    label="Recipe"
-                    name="recipe_name"
-                    component={this.renderNameField}
-                    placeholder="Recipe name"
-                />
-                <Field
-                    label="Ingredients"
-                    name="recipe_ingredients"
-                    component={this.renderIngredientsField}
-                    rows="8" 
-                    placeholder="Enter Ingredients, Separated, By Comma"
-                />
-                <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
+            <div className={modalClass} >
+                <form 
+                    onSubmit={handleSubmit(this.onSubmit.bind(this))}
+                    className="Modal--form">
+                    <label>Add a Recipe</label>
+                    <Field
+                        label="Recipe"
+                        name="recipe_name"
+                        component={this.renderNameField}
+                        placeholder="Recipe name"
+                    />
+                    <Field
+                        label="Ingredients"
+                        name="recipe_ingredients"
+                        component={this.renderIngredientsField}
+                        rows="8" 
+                        placeholder="Enter Ingredients, Separated, By Comma"
+                    />
+                    <button 
+                            type="submit" 
+                            className="Modal--form_submit">
+                        Add Recipe
+                    </button>
+                    <button 
+                            type="submit" 
+                            className="Modal--form_close"
+                            onClick={handleClose}>
+                        Close
+                    </button>
+                </form>
+            </div>
         );
     }
 }
@@ -81,10 +96,10 @@ function validate(values) {
     const errors = {};
 
     if (!values.recipe_name) {
-        errors.title = "Enter a title";
+        errors.recipe_name = "Enter a recipe";
     }
     if (!values.recipe_ingredients) {
-        errors.categories = "Enter some categories";
+        errors.recipe_ingredients = "Enter some categories";
     }
 
     return errors;

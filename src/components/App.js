@@ -1,10 +1,24 @@
-import '../style/App.css';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addRecipe } from '../actions/index';
 import Modal from './Modal';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            show: false,
+        };
+    }
+
+    showModal = () => {
+        this.setState({ show: true });
+    }
+
+    hideModal = () => {
+        this.setState({ show: false });
+    }
 
     renderList() {
 
@@ -36,7 +50,12 @@ class App extends Component {
                     <ul className="recipes--list">
                         {this.renderList()}
                     </ul>
-                    <Modal />
+                    <button onClick={this.showModal}>
+                        Add Recipe
+                    </button>
+                    <Modal 
+                        show={this.state.show}
+                        handleClose={this.hideModal}/>
                 </div>
             </div>
         );

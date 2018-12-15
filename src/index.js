@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxPromise from 'redux-promise';
 import reducers from './reducers';
 
-import './style/index.css';
+import './style/main.scss';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 

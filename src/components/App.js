@@ -29,7 +29,7 @@ class App extends Component {
                     <li
                         key={recipe_name}
                         // onClick={() => this.props.addRecipe(recipe)}
-                        className="recipes--list_item"
+                        className="App--content_list-item"
                     >
                         {recipe_ingredients}
                     </li>
@@ -45,12 +45,13 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App--container">
                 <div className="App--content">
-                    <ul className="recipes--list">
+                    <ul className="App--content_list">
                         {this.renderList()}
                     </ul>
-                    <button onClick={this.showModal}>
+                    <button className="button--add" 
+                            onClick={this.showModal}>
                         Add Recipe
                     </button>
                     <Modal 

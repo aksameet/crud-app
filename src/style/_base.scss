@@ -5,3 +5,42 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.button {
+    &--normal,
+    &--add,
+    &--delete {
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        margin-right: 15px;
+        cursor: pointer;
+        &:focus {
+            outline: none;
+        }
+    }
+    &--normal {
+        background-color: white;
+        border: 1px solid $color-font;
+        color: $color-font;
+        &:active {
+            background-color: lightgrey;
+        }
+    }
+    &--add {
+        background-color: $color-blue;
+        border: 1px solid $color-lightblue;
+        color: white;
+        &:active {
+            background-color: $color-lightblue;
+        }
+    }
+    &--delete {
+        background-color: $color-red;
+        border: 1px solid $color-font;
+        color: white;
+        &:active {
+            background-color: lightcoral;
+        }
+    }
+}

@@ -7,17 +7,17 @@ class Modal extends Component {
 
     renderNameField(field) {
         const {label, input, placeholder, meta: { touched, error } } = field;
-        const className = `${touched && error ? "has-danger" : ""}`;
+        const className = `Modal--form-inputs_container ${touched && error ? "error" : ""}`;
 
         return (
             <div className={className}>
-                <label>{label}</label>
+                <label className="Modal--form-inputs_label">{label}</label>
                 <input 
-                    className="form-control" 
+                    className="Modal--form-inputs_input"
                     type="text" 
                     {...input} 
                     placeholder={placeholder}/>
-                <div className="text-help">
+                <div className="error-text">
                     {touched ? error : ""}
                 </div>
             </div>
@@ -27,19 +27,19 @@ class Modal extends Component {
     renderIngredientsField(field) {
 
         const { label, input, rows, placeholder, meta : {touched, error} } = field;
-        const textareaStyles = `${touched && error ? "customClass" : ""}`;
+        const className = `Modal--form-inputs_container ${touched && error ? "error" : ""}`;
 
         return (
-            <div>
-                <label>{label}</label>
+            <div className={className}>
+                <label className="Modal--form-inputs_label">{label}</label>
                 <textarea
                     type="text"
-                    className={textareaStyles}
+                    className="Modal--form-inputs_textarea"
                     {...input}
                     rows={rows}
                     placeholder={placeholder}
                     />
-                <div className="text-danger">
+                <div className="error-text">
                     {touched ? error : ''}
                 </div>
             </div>
@@ -54,38 +54,49 @@ class Modal extends Component {
 
     render() {
         const { handleSubmit, show, handleClose } = this.props;
-        let modalClass = `Modal ${show ? 'active': null}`
+        let modalClass = `Modal ${show ? 'active': ''}`
 
         return (
             <div className={modalClass} >
                 <form 
                     onSubmit={handleSubmit(this.onSubmit.bind(this))}
                     className="Modal--form">
-                    <label>Add a Recipe</label>
-                    <Field
-                        label="Recipe"
-                        name="recipe_name"
-                        component={this.renderNameField}
-                        placeholder="Recipe name"
-                    />
-                    <Field
-                        label="Ingredients"
-                        name="recipe_ingredients"
-                        component={this.renderIngredientsField}
-                        rows="8" 
-                        placeholder="Enter Ingredients, Separated, By Comma"
-                    />
-                    <button 
-                            type="submit" 
-                            className="Modal--form_submit">
-                        Add Recipe
-                    </button>
-                    <button 
-                            type="submit" 
-                            className="Modal--form_close"
-                            onClick={handleClose}>
-                        Close
-                    </button>
+                    <div className="Modal--form-header">
+                        <label className="Modal--form-header_label">Add a Recipe</label>
+                        <span 
+                            className="Modal--form-header_close"
+                            onClick={ handleClose }
+                        ></span>
+                    </div>
+                    <div className="Modal--form-inputs">
+                        <Field
+                            label="Recipe"
+                            name="recipe_name"
+                            component={this.renderNameField}
+                            placeholder="Recipe name"
+                        />
+                        <Field
+                            label="Ingredients"
+                            name="recipe_ingredients"
+                            component={this.renderIngredientsField}
+                            rows="8" 
+                            placeholder="Enter Ingredients, Separated, By Comma"
+                        />
+                    </div>
+                    <div className="Modal--form-controls">
+                        <button 
+                                type="submit" 
+                                className="button--add"
+                                onClick={ handleClose }>
+                            Add Recipe
+                        </button>
+                        <span 
+                                className="button--normal"
+                                onClick={ handleClose }>
+                            Close
+                        </span>
+                    </div>
+
                 </form>
             </div>
         );

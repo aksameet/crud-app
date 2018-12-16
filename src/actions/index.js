@@ -1,8 +1,12 @@
-import { ADD_RECIPES } from './types';
+import _ from "lodash";
+import { FETCH_RECIPES } from './types';
 
-export function addRecipe(recipe) {
+export function fetchRecipes() {
+
+    const data = {...localStorage}
+
     return {
-        type: ADD_RECIPES,
-        payload: recipe
+        type: FETCH_RECIPES,
+        payload: data
     };
 }

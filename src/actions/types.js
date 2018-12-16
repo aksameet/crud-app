@@ -1,1 +1,1 @@
-export const ADD_RECIPES = 'ADD_RECIPES';
+export const FETCH_RECIPES = 'FETCH_RECIPES';

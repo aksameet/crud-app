@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { addRecipe } from '../actions/index';
+import { fetchRecipes } from '../actions/index';
 
 class Modal extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            id: 1,
+        };
+    }
 
     renderNameField(field) {
         const {label, input, placeholder, meta: { touched, error } } = field;
@@ -47,9 +55,11 @@ class Modal extends Component {
     }
 
     onSubmit(values) {
-        this.props.addRecipe(values, () => {
-            // this.props.history.push("/");
-        });
+
+        this.setState({ id: this.state.id + 1 });
+        localStorage.setItem(this.state.id, JSON.stringify(values));
+        this.props.fetchRecipes();
+
     }
 
     render() {
@@ -88,7 +98,7 @@ class Modal extends Component {
                                 type="submit" 
                                 className="button--add"
                                 onClick={ handleClose }>
-                            Add Recipe
+                            {modalKeyword} Recipe
                         </button>
                         <span 
                                 className="button--normal"
@@ -110,7 +120,7 @@ function validate(values) {
         errors.recipe_name = "Enter a recipe";
     }
     if (!values.recipe_ingredients) {
-        errors.recipe_ingredients = "Enter some categories";
+        errors.recipe_ingredients = "Enter some ingredients separated by comma";
     }
 
     return errors;
@@ -119,4 +129,4 @@ function validate(values) {
 export default reduxForm({
     validate,
     form: "RecipeForm"
-})(connect(null, { addRecipe })(Modal));
+})(connect(null, { fetchRecipes })(Modal));

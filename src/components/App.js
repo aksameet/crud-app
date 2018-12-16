@@ -1,6 +1,7 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addRecipe } from '../actions/index';
+import { fetchRecipes } from '../actions/index';
 import Modal from './Modal';
 
 class App extends Component {
@@ -10,12 +11,20 @@ class App extends Component {
         this.state = {
             show: false,
             active: false,
-            chosen: null
+            chosen: null,
+            modalKeyword: ''
         };
     }
 
-    showModal = () => {
-        this.setState({ show: true });
+    componentDidMount() {
+        // localStorage.clear()
+        this.props.fetchRecipes();
+    }
+
+    showModal(keyword) {
+        this.setState({ 
+            show: true,
+            modalKeyword: keyword});
     }
 
     hideModal = () => {
@@ -23,7 +32,6 @@ class App extends Component {
     }
 
     toggleClass(id) {
-        console.log(id);
         const currentState = this.state.active;
         this.setState({ 
             active: !currentState,
@@ -31,11 +39,18 @@ class App extends Component {
         });
     };
 
-    renderList() {
+    onDeleteClick(index) {
+        localStorage.removeItem(index);
+        this.props.fetchRecipes();
+    }
 
+    renderList() {
         if (this.props.recipes) {
-            return this.props.recipes.map((recipe, index) => {
-                const { recipe_name, recipe_ingredients } = recipe,
+
+            return _.map(this.props.recipes, (recipe, index) => {
+                const recipeParsed = JSON.parse(recipe);
+                
+                const { recipe_name, recipe_ingredients } = recipeParsed,
                         itemStyles = `  App--content_list-item 
                                         ${this.state.chosen === index && this.state.active ? 'active': ''}
                                     `;
@@ -56,11 +71,11 @@ class App extends Component {
                             </ul>
                             <div>
                             <button className="button--delete" 
-                                    onClick={this.showModal}>
+                                    onClick={this.onDeleteClick.bind(this, index)}>
                                 Delete
                             </button>
                             <button className="button--normal" 
-                                    onClick={this.showModal}>
+                                    onClick={this.showModal.bind(this, 'Edit')}>
                                 Edit
                             </button>
                             </div>
@@ -70,10 +85,11 @@ class App extends Component {
             });
         } else {
             return (
-                <div></div>
+                <div key="0"></div>
             )
         }
     }
+    
     renderIngredients(ingredients) {
         if (ingredients) {
             let array = ingredients.split(',');
@@ -100,11 +116,11 @@ class App extends Component {
                         {this.renderList()}
                     </ul>
                     <button className="button--add" 
-                            onClick={this.showModal}>
+                            onClick={this.showModal.bind(this, 'Add')}>
                         Add Recipe
                     </button>
                     <Modal 
-                        modalKeyword="Add"
+                        modalKeyword={this.state.modalKeyword}
                         show={this.state.show}
                         handleClose={this.hideModal}/>
                 </div>
@@ -117,4 +133,4 @@ function mapStateToProps({ recipes }) {
     return { recipes };
 }
 
-export default connect(mapStateToProps, {addRecipe})(App);
+export default connect(mapStateToProps, { fetchRecipes })(App);

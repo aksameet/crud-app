@@ -9,6 +9,8 @@ class App extends Component {
 
         this.state = {
             show: false,
+            active: false,
+            chosen: null
         };
     }
 
@@ -20,18 +22,49 @@ class App extends Component {
         this.setState({ show: false });
     }
 
+    toggleClass(id) {
+        console.log(id);
+        const currentState = this.state.active;
+        this.setState({ 
+            active: !currentState,
+            chosen: id
+        });
+    };
+
     renderList() {
 
         if (this.props.recipes) {
-            return this.props.recipes.map(recipe => {
-                const { recipe_name, recipe_ingredients } = recipe;
+            return this.props.recipes.map((recipe, index) => {
+                const { recipe_name, recipe_ingredients } = recipe,
+                        itemStyles = `  App--content_list-item 
+                                        ${this.state.chosen === index && this.state.active ? 'active': ''}
+                                    `;
+
                 return (
                     <li
-                        key={recipe_name}
-                        // onClick={() => this.props.addRecipe(recipe)}
-                        className="App--content_list-item"
+                        key={index}
+                        onClick={this.toggleClass.bind(this, index)} 
+                        className={ itemStyles }
                     >
-                        {recipe_ingredients}
+                        <span className="App--content_list-item-recipename">{recipe_name}</span>
+                        <div className="App--content_list-item-ingredients_container">
+                            <span className="App--content_list-item-ingredients_title">
+                                Ingredients
+                            </span>
+                            <ul className="App--content_list-item-ingredients">
+                                {this.renderIngredients(recipe_ingredients)}
+                            </ul>
+                            <div>
+                            <button className="button--delete" 
+                                    onClick={this.showModal}>
+                                Delete
+                            </button>
+                            <button className="button--normal" 
+                                    onClick={this.showModal}>
+                                Edit
+                            </button>
+                            </div>
+                        </div>
                     </li>
                 );
             });
@@ -40,7 +73,23 @@ class App extends Component {
                 <div></div>
             )
         }
-
+    }
+    renderIngredients(ingredients) {
+        if (ingredients) {
+            let array = ingredients.split(',');
+            return array.map((ingredient, index) => {
+                return (
+                    <li key={index}
+                        className="App--content_list-item-ingredients_items">
+                        {ingredient}
+                    </li>
+                )
+            })
+        } else {
+            return (
+                <div></div>
+            )
+        }
     }
 
     render() {
@@ -55,6 +104,7 @@ class App extends Component {
                         Add Recipe
                     </button>
                     <Modal 
+                        modalKeyword="Add"
                         show={this.state.show}
                         handleClose={this.hideModal}/>
                 </div>

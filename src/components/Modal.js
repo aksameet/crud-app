@@ -53,7 +53,7 @@ class Modal extends Component {
     }
 
     render() {
-        const { handleSubmit, show, handleClose } = this.props;
+        const { modalKeyword, handleSubmit, show, handleClose } = this.props;
         let modalClass = `Modal ${show ? 'active': ''}`
 
         return (
@@ -62,7 +62,7 @@ class Modal extends Component {
                     onSubmit={handleSubmit(this.onSubmit.bind(this))}
                     className="Modal--form">
                     <div className="Modal--form-header">
-                        <label className="Modal--form-header_label">Add a Recipe</label>
+                        <label className="Modal--form-header_label">{modalKeyword} a Recipe</label>
                         <span 
                             className="Modal--form-header_close"
                             onClick={ handleClose }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reset, reduxForm } from 'redux-form';
 import { fetchRecipes } from '../actions/index';
 
 class Modal extends Component {
@@ -9,7 +9,7 @@ class Modal extends Component {
         super(props);
 
         this.state = {
-            id: 1,
+            id: 1
         };
     }
 
@@ -24,7 +24,8 @@ class Modal extends Component {
                     className="Modal--form-inputs_input"
                     type="text" 
                     {...input} 
-                    placeholder={placeholder}/>
+                    placeholder={placeholder}
+                    />
                 <div className="error-text">
                     {touched ? error : ""}
                 </div>
@@ -56,7 +57,9 @@ class Modal extends Component {
 
     onSubmit(values) {
 
-        this.setState({ id: this.state.id + 1 });
+        this.setState({ 
+            id: this.state.id + 1
+        });
         localStorage.setItem(this.state.id, JSON.stringify(values));
         this.props.fetchRecipes();
 
@@ -126,7 +129,11 @@ function validate(values) {
     return errors;
 }
 
+const afterSubmit = (result, dispatch) =>
+  dispatch(reset('RecipeForm'));
+
 export default reduxForm({
     validate,
-    form: "RecipeForm"
+    form: "RecipeForm",
+    onSubmitSuccess: afterSubmit
 })(connect(null, { fetchRecipes })(Modal));

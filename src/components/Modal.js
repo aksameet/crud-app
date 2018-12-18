@@ -29,6 +29,10 @@ class Modal extends Component {
             }
         }
     }
+    
+
+    // ----------- Form handlers ------------ //
+    // -------------------------------------- //
 
     onNameInputChange(event) {
         this.setState({ recipe_name: event.target.value });
@@ -40,6 +44,10 @@ class Modal extends Component {
     onSubmit(event) {
         event.preventDefault();
     };
+
+
+    // ----------- Add/Edit/Close ----------- //
+    // -------------------------------------- //
 
     handleAdd() {
         this.props.handleClose();

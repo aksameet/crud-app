@@ -18,12 +18,12 @@ class App extends Component {
     };
 
     componentDidMount() {
-        // localStorage.clear();
         this.props.fetchRecipes();
     };
 
 
     // --------- Modal helpers --------- //
+    // --------------------------------- //
 
     hideModal = () => {
         this.setState({ show: false });
@@ -31,6 +31,7 @@ class App extends Component {
 
 
     // --------- Buttons helpers --------- //
+    // --------------------------------- //
 
     onAddClick(keyword) {
         this.setState({
@@ -63,7 +64,8 @@ class App extends Component {
     };
 
 
-    // --------- Rendering --------- //
+    // ----------- Rendering ----------- //
+    // --------------------------------- //
 
     renderList() {
         if (this.props.recipes) {

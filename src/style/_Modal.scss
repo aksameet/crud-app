@@ -68,7 +68,8 @@
             padding: 15px;
             box-sizing: border-box;
             .button {
-                &--add {
+                &--add,
+                &--edit {
                     margin: auto 15px auto auto;
                 }
                 &--normal {

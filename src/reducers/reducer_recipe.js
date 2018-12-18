@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { FETCH_RECIPES } from '../actions/types';
 
 export default function(state = [], action) {

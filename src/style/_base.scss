@@ -9,6 +9,7 @@ body {
 .button {
     &--normal,
     &--add,
+    &--edit,
     &--delete {
         padding: 10px 15px;
         border-radius: 5px;
@@ -28,13 +29,24 @@ body {
             background-color: lightgrey;
         }
     }
-    &--add {
+    &--add,
+    &--edit {
         background-color: $color-blue;
         border: 1px solid $color-lightblue;
         color: white;
         &:active,
         &:hover {
             background-color: $color-lightblue;
+        }
+    }
+    &--add {
+        &.Edit {
+            display: none;
+        }
+    }
+    &--edit {
+        &.Add {
+            display: none;
         }
     }
     &--delete {
@@ -46,9 +58,4 @@ body {
             background-color: lightcoral;
         }
     }
-}
-
-.error-text {
-    color: red;
-    font-size: 10px;
 }

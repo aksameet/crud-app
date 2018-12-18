@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchRecipes } from '../actions/index';
+import { fetchRecipes, editRecipes } from '../actions/index';
 import Modal from './Modal';
 
 class App extends Component {
@@ -12,25 +12,47 @@ class App extends Component {
             show: false,
             active: false,
             chosen: null,
-            modalKeyword: ''
+            modalKeyword: '',
+            recipe_id: 0
         };
-    }
+    };
 
     componentDidMount() {
         // localStorage.clear()
         this.props.fetchRecipes();
-    }
+    };
 
-    showModal(keyword) {
-        this.setState({ 
-            show: true,
-            modalKeyword: keyword});
-    }
+
+    // --------- Modal helpers --------- //
 
     hideModal = () => {
         this.setState({ show: false });
-    }
+    };
 
+
+    // --------- Buttons helpers --------- //
+
+    onAddClick(keyword) {
+        this.setState({ 
+            show: true,
+            modalKeyword: keyword});
+    };
+
+    onDeleteClick(index) {
+        localStorage.removeItem(index);
+        this.props.fetchRecipes();
+    };
+
+    onEditClick(keyword, index) {
+
+        this.props.editRecipes(index);
+        
+        this.setState({ 
+            show: true,
+            modalKeyword: keyword
+        });
+    };
+    
     toggleClass(id) {
         const currentState = this.state.active;
         this.setState({ 
@@ -39,10 +61,8 @@ class App extends Component {
         });
     };
 
-    onDeleteClick(index) {
-        localStorage.removeItem(index);
-        this.props.fetchRecipes();
-    }
+
+    // --------- Rendering --------- //
 
     renderList() {
         if (this.props.recipes) {
@@ -75,7 +95,7 @@ class App extends Component {
                                 Delete
                             </button>
                             <button className="button--normal" 
-                                    onClick={this.showModal.bind(this, 'Edit')}>
+                                    onClick={this.onEditClick.bind(this, 'Edit', index, recipeParsed)}>
                                 Edit
                             </button>
                             </div>
@@ -85,10 +105,10 @@ class App extends Component {
             });
         } else {
             return (
-                <div key="0"></div>
+                <div></div>
             )
         }
-    }
+    };
     
     renderIngredients(ingredients) {
         if (ingredients) {
@@ -106,7 +126,7 @@ class App extends Component {
                 <div></div>
             )
         }
-    }
+    };
 
     render() {
         return (
@@ -122,15 +142,16 @@ class App extends Component {
                     <Modal 
                         modalKeyword={this.state.modalKeyword}
                         show={this.state.show}
-                        handleClose={this.hideModal}/>
+                        handleClose={this.hideModal}
+                    />
                 </div>
             </div>
         );
     }
-}
+};
 
 function mapStateToProps({ recipes }) {
     return { recipes };
-}
+};
 
-export default connect(mapStateToProps, { fetchRecipes })(App);
+export default connect(mapStateToProps, { fetchRecipes, editRecipes })(App);

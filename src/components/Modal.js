@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reset, reduxForm } from 'redux-form';
 import { fetchRecipes } from '../actions/index';
 
 class Modal extends Component {
@@ -9,103 +8,141 @@ class Modal extends Component {
         super(props);
 
         this.state = {
-            id: 1
+            id: '',
+            recipe_name: '',
+            recipe_ingredients: ''
         };
+    };
+
+    componentDidUpdate() {
+
+        if (this.props.activeRecipe !== null) {
+            const { id, recipe_name, recipe_ingredients } = this.props.activeRecipe;
+
+            if ( this.state.id !== id ) {
+
+                this.setState({
+                    id: id,
+                    recipe_name: recipe_name,
+                    recipe_ingredients: recipe_ingredients
+                })
+            }
+        }
     }
 
-    renderNameField(field) {
-        const {label, input, placeholder, meta: { touched, error } } = field;
-        const className = `Modal--form-inputs_container ${touched && error ? "error" : ""}`;
-
-        return (
-            <div className={className}>
-                <label className="Modal--form-inputs_label">{label}</label>
-                <input 
-                    className="Modal--form-inputs_input"
-                    type="text" 
-                    {...input} 
-                    placeholder={placeholder}
-                    />
-                <div className="error-text">
-                    {touched ? error : ""}
-                </div>
-            </div>
-        );
+    onNameInputChange(event) {
+        this.setState({ recipe_name: event.target.value });
+    }
+    onIngredientsInputChange(event) {
+        this.setState({ recipe_ingredients: event.target.value });
     }
 
-    renderIngredientsField(field) {
+    onSubmit(event) {
+        event.preventDefault();
+    };
 
-        const { label, input, rows, placeholder, meta : {touched, error} } = field;
-        const className = `Modal--form-inputs_container ${touched && error ? "error" : ""}`;
-
-        return (
-            <div className={className}>
-                <label className="Modal--form-inputs_label">{label}</label>
-                <textarea
-                    type="text"
-                    className="Modal--form-inputs_textarea"
-                    {...input}
-                    rows={rows}
-                    placeholder={placeholder}
-                    />
-                <div className="error-text">
-                    {touched ? error : ''}
-                </div>
-            </div>
-        )
-    }
-
-    onSubmit(values) {
+    handleAdd() {
+        this.props.handleClose();
+        const values = { 
+            recipe_name: this.state.recipe_name, 
+            recipe_ingredients: this.state.recipe_ingredients 
+        };
 
         this.setState({ 
-            id: this.state.id + 1
+            id: this.state.id + 1,
         });
+
         localStorage.setItem(this.state.id, JSON.stringify(values));
         this.props.fetchRecipes();
 
+        this.setState({ 
+            id: this.props.recipe_id,
+            recipe_name: '',
+            recipe_ingredients: ''
+        });
+    }
+
+    handleEdit() {
+
+        this.props.handleClose();
+        const values = { 
+            recipe_name: this.state.recipe_name, 
+            recipe_ingredients: this.state.recipe_ingredients 
+        };
+
+        localStorage.setItem(this.state.id, JSON.stringify(values));
+        this.props.fetchRecipes();
+
+        this.setState({
+            id: '',
+            recipe_name: '',
+            recipe_ingredients: ''
+        });
+    }
+
+    modalClosed() {
+        this.props.handleClose();
+        this.props.fetchRecipes();
+        this.setState({ 
+            id: '',
+            recipe_name: '',
+            recipe_ingredients: ''
+        });
     }
 
     render() {
-        const { modalKeyword, handleSubmit, show, handleClose } = this.props;
+        const { modalKeyword, show } = this.props;
         let modalClass = `Modal ${show ? 'active': ''}`
 
         return (
             <div className={modalClass} >
                 <form 
-                    onSubmit={handleSubmit(this.onSubmit.bind(this))}
+                    onSubmit={this.onSubmit.bind(this)}
                     className="Modal--form">
                     <div className="Modal--form-header">
                         <label className="Modal--form-header_label">{modalKeyword} a Recipe</label>
                         <span 
                             className="Modal--form-header_close"
-                            onClick={ handleClose }
-                        ></span>
+                            onClick={ this.modalClosed.bind(this) }>
+                        </span>
                     </div>
                     <div className="Modal--form-inputs">
-                        <Field
-                            label="Recipe"
-                            name="recipe_name"
-                            component={this.renderNameField}
-                            placeholder="Recipe name"
-                        />
-                        <Field
-                            label="Ingredients"
-                            name="recipe_ingredients"
-                            component={this.renderIngredientsField}
-                            rows="8" 
-                            placeholder="Enter Ingredients, Separated, By Comma"
-                        />
+                        <div className="Modal--form-inputs_container">
+                            <label className="Modal--form-inputs_label">Recipe</label>
+                            <input 
+                                className="Modal--form-inputs_input"
+                                type="text" 
+                                placeholder="Recipe name"
+                                value={this.state.recipe_name}
+                                onChange={this.onNameInputChange.bind(this)}
+                                />
+                            <label className="Modal--form-inputs_label">Ingredients</label>
+                            <textarea
+                                type="text"
+                                className="Modal--form-inputs_textarea"
+                                rows="8"
+                                placeholder="Enter Ingredients, Separated, By Comma"
+                                value={this.state.recipe_ingredients}
+                                onChange={this.onIngredientsInputChange.bind(this)}
+                                />
+                        </div>       
                     </div>
                     <div className="Modal--form-controls">
                         <button 
                                 type="submit" 
-                                className="button--add"
-                                onClick={ handleClose }>
+                                className={`button--add ${modalKeyword}`}
+                                onClick={ this.handleAdd.bind(this) }>
+                            {modalKeyword} Recipe
+                        </button>
+                        <button 
+                                type="submit" 
+                                className={`button--edit ${modalKeyword}`}
+                                onClick={ this.handleEdit.bind(this) }>
                             {modalKeyword} Recipe
                         </button>
                         <span 
                                 className="button--normal"
-                                onClick={ handleClose }>
+                                onClick={ this.modalClosed.bind(this) }>
                             Close
                         </span>
                     </div>
@@ -113,27 +150,11 @@ class Modal extends Component {
                 </form>
             </div>
         );
-    }
+    };
+};
+
+function mapStateToProps({ activeRecipe }) {
+    return { activeRecipe }
 }
 
-function validate(values) {
-    const errors = {};
-
-    if (!values.recipe_name) {
-        errors.recipe_name = "Enter a recipe";
-    }
-    if (!values.recipe_ingredients) {
-        errors.recipe_ingredients = "Enter some ingredients separated by comma";
-    }
-
-    return errors;
-}
-
-const afterSubmit = (result, dispatch) =>
-  dispatch(reset('RecipeForm'));
-
-export default reduxForm({
-    validate,
-    form: "RecipeForm",
-    onSubmitSuccess: afterSubmit
-})(connect(null, { fetchRecipes })(Modal));
+export default connect(mapStateToProps, { fetchRecipes })(Modal);

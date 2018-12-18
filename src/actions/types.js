@@ -1,0 +1,2 @@
+export const FETCH_RECIPES = 'FETCH_RECIPES';
+export const EDIT_RECIPE = 'EDIT_RECIPE';

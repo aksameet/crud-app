@@ -1,0 +1,81 @@
+.Modal {
+    position: absolute;
+    top: -120%;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    display: flex;
+    transition: all .4s ease-in-out;
+    &.active {
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, .3);
+    }
+    &--form {
+        display: flex;
+        flex-direction: column;
+        margin: 60px auto auto;
+        width: 70%;
+        background-color: #fff;
+        border: 1px solid $color-font;
+        border-radius: 5px;
+        box-shadow: 0px 0px 18px 1px rgba(0, 0, 0, 0.75);
+        &-header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            border-bottom: 1px solid lightgrey;
+            padding: 15px;
+            box-sizing: border-box;
+            &_label {}
+            &_close {
+                display: block;
+                width: 10px;
+                height: 10px;
+                margin: auto 0 auto auto;
+                background: url(../assets/Grey_close_x.svg);
+                cursor: pointer;
+            }
+        }
+        &-inputs {
+            padding: 0 15px 15px;
+            box-sizing: border-box;
+            &_container {
+                display: flex;
+                flex-direction: column;
+            }
+            &_label {
+                font-size: 12px;
+                font-weight: bold;
+                margin-top: 15px;
+                margin-bottom: 5px;
+            }
+            &_input,
+            &_textarea {
+                padding: 10px;
+                border-radius: 3px;
+                border: 1px solid #ccc;
+            }
+        }
+        &-controls {
+            width: 100%;
+            display: flex;
+            margin: auto auto 0 auto;
+            justify-content: space-between;
+            width: 100%;
+            border-top: 1px solid lightgrey;
+            padding: 15px;
+            box-sizing: border-box;
+            .button {
+                &--add,
+                &--edit {
+                    margin: auto 15px auto auto;
+                }
+                &--normal {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}

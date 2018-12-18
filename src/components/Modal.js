@@ -43,20 +43,16 @@ class Modal extends Component {
 
     handleAdd() {
         this.props.handleClose();
-        const values = { 
-            recipe_name: this.state.recipe_name, 
-            recipe_ingredients: this.state.recipe_ingredients 
-        };
+        const   values = { 
+                    recipe_name: this.state.recipe_name, 
+                    recipe_ingredients: this.state.recipe_ingredients 
+                };
 
-        this.setState({ 
-            id: this.state.id + 1,
-        });
-
-        localStorage.setItem(this.state.id, JSON.stringify(values));
+        localStorage.setItem(this.props.idCounter, JSON.stringify(values));
         this.props.fetchRecipes();
 
         this.setState({ 
-            id: this.props.recipe_id,
+            id: '',
             recipe_name: '',
             recipe_ingredients: ''
         });

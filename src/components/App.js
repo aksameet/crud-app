@@ -13,12 +13,12 @@ class App extends Component {
             active: false,
             chosen: null,
             modalKeyword: '',
-            recipe_id: 0
+            idCounter: 0
         };
     };
 
     componentDidMount() {
-        // localStorage.clear()
+        // localStorage.clear();
         this.props.fetchRecipes();
     };
 
@@ -33,7 +33,8 @@ class App extends Component {
     // --------- Buttons helpers --------- //
 
     onAddClick(keyword) {
-        this.setState({ 
+        this.setState({
+            idCounter: this.state.idCounter + 1,
             show: true,
             modalKeyword: keyword});
     };
@@ -136,13 +137,14 @@ class App extends Component {
                         {this.renderList()}
                     </ul>
                     <button className="button--add" 
-                            onClick={this.showModal.bind(this, 'Add')}>
+                            onClick={this.onAddClick.bind(this, 'Add')}>
                         Add Recipe
                     </button>
                     <Modal 
                         modalKeyword={this.state.modalKeyword}
                         show={this.state.show}
                         handleClose={this.hideModal}
+                        idCounter={this.state.idCounter}
                     />
                 </div>
             </div>
